@@ -89,8 +89,8 @@ export interface ProjectDetailConfig {
 
 export const siteConfig: SiteConfig = {
   language: "en",
-  siteTitle: "EliteCare | Compassionate Care Across the UK",
-  siteDescription: "EliteCare provides personalised, compassionate home healthcare, specialised care, and elderly care services delivered with dignity across the UK. 15+ years of healthcare excellence.",
+  siteTitle: "Elite Care and Support | Compassionate Care Across the UK",
+  siteDescription: "Elite Care and Support provides personalised, compassionate home healthcare, specialised care, and elderly care services delivered with dignity across the UK. 15+ years of healthcare excellence.",
 }
 
 export const navigationConfig: NavigationConfig = {
@@ -116,8 +116,8 @@ export const heroConfig: HeroConfig = {
 
 export const philosophyConfig: PhilosophyConfig = {
   eyebrow: "OUR APPROACH",
-  title: "Why EliteCare",
-  body: "For over 15 years, EliteCare has been at the forefront of compassionate healthcare in the UK. We believe every individual deserves care that honours their dignity, preserves their independence, and enriches their quality of life. Our team of dedicated professionals delivers personalised support tailored to each client's unique needs.",
+  title: "Why Elite Care and Support",
+  body: "For over 15 years, Elite Care and Support has been at the forefront of compassionate healthcare in the UK. We believe every individual deserves care that honours their dignity, preserves their independence, and enriches their quality of life. Our team of dedicated professionals delivers personalised support tailored to each client's unique needs.",
   rollingWords: ["COMPASSION", "DIGNITY", "RESPECT", "CARE", "EXCELLENCE", "TRUST"],
 }
 
@@ -232,8 +232,8 @@ export const mediumsConfig: MediumsConfig = {
 }
 
 export const footerConfig: FooterConfig = {
-  visionText: "For over 15 years, EliteCare has been transforming lives through compassionate, personalised healthcare. We believe everyone deserves to live with dignity, independence, and comfort in their own home. Our commitment to excellence drives everything we do.",
-  brandName: "EliteCare",
+  visionText: "For over 15 years, Elite Care and Support has been transforming lives through compassionate, personalised healthcare. We believe everyone deserves to live with dignity, independence, and comfort in their own home. Our commitment to excellence drives everything we do.",
+  brandName: "Elite Care and Support",
   columns: [
     {
       heading: "SERVICES",
@@ -261,7 +261,7 @@ export const footerConfig: FooterConfig = {
       ],
     },
   ],
-  copyright: "© 2026 EliteCare — Compassionate Healthcare",
+  copyright: "© 2026 Elite Care and Support — Compassionate Healthcare",
   videoPath: "",
 }
 

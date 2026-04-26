@@ -46,7 +46,7 @@ export default function Navigation() {
       <img
         src="elitelogo.png"
         alt="Elite Care And Support LTD"
-        style={{ height: '52px', width: 'auto', display: 'block' }}
+        style={{ height: '72px', width: 'auto', display: 'block' }}
       />
       <div style={{ display: 'flex', gap: '36px', alignItems: 'center' }}>
         {navigationConfig.links.map((item) => (

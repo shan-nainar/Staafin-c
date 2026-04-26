@@ -3,6 +3,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import FluidBackground from './components/FluidBackground';
+import LoadingScreen from './components/LoadingScreen';
 import Navigation from './components/Navigation';
 import HeroField from './sections/HeroField';
 import PhilosophyCarousel from './sections/PhilosophyCarousel';
@@ -100,6 +101,7 @@ function App() {
 
   return (
     <div style={{ position: 'relative' }}>
+      <LoadingScreen />
       <FluidBackground isActive={fluidActive} />
       <Navigation />
 

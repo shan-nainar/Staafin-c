@@ -142,16 +142,19 @@ export default function Footer() {
           }}
         >
           {footerConfig.brandName && (
-            <p
-              className="font-serif-display"
-              style={{
-                fontSize: '16px',
-                letterSpacing: '0.15em',
-                color: 'rgba(237,232,228,0.5)',
-              }}
-            >
-              {footerConfig.brandName}
-            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+              <img src="elitelogo.png" alt="Elite Care and Support LTD" style={{ height: '80px', width: 'auto', opacity: 0.85 }} />
+              <p
+                className="font-serif-display"
+                style={{
+                  fontSize: '13px',
+                  letterSpacing: '0.15em',
+                  color: 'rgba(237,232,228,0.5)',
+                }}
+              >
+                {footerConfig.brandName}
+              </p>
+            </div>
           )}
           {footerConfig.copyright && (
             <p
