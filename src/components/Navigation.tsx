@@ -43,17 +43,11 @@ export default function Navigation() {
         WebkitBackdropFilter: scrolled ? 'blur(8px)' : 'none',
       }}
     >
-      <div
-        className="font-serif-display"
-        style={{
-          fontSize: '18px',
-          fontWeight: 400,
-          letterSpacing: '0.15em',
-          color: '#FFFFFF',
-        }}
-      >
-        {navigationConfig.brandMark}
-      </div>
+      <img
+        src="elitelogo.png"
+        alt="Elite Care And Support LTD"
+        style={{ height: '52px', width: 'auto', display: 'block' }}
+      />
       <div style={{ display: 'flex', gap: '36px', alignItems: 'center' }}>
         {navigationConfig.links.map((item) => (
           <button
