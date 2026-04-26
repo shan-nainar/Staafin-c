@@ -32,12 +32,15 @@ export default function HeroField() {
           <h2
             className="font-serif-display"
             style={{
-              fontSize: 'clamp(48px, 7vw, 112px)',
+              fontSize: 'clamp(32px, 5vw, 80px)',
               fontWeight: 300,
               color: '#ffffff',
-              letterSpacing: '0.15em',
+              letterSpacing: '0.1em',
               textShadow,
               margin: 0,
+              whiteSpace: 'pre-line',
+              lineHeight: 1.2,
+              textAlign: 'center',
             }}
           >
             {heroConfig.wordmarkText}

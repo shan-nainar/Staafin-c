@@ -1,87 +1,42 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef, useState } from 'react';
 import { philosophyConfig } from '../config';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function PhilosophyCarousel() {
   const WORDS = philosophyConfig.rollingWords;
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const rotationRef = useRef({ value: 0 });
-  const speedRef = useRef({ value: 0 });
-  const rafRef = useRef<number>(0);
+  const [current, setCurrent] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const goTo = (idx: number) => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setAnimating(false);
+    }, 350);
+  };
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const ring = ringRef.current;
-    if (!section || !ring) return;
-
-    const ctx = gsap.context(() => {
-      gsap.to(rotationRef.current, {
-        value: 360,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-          onUpdate: (self) => {
-            speedRef.current.value = self.getVelocity() * 0.0003;
-          },
-        },
-      });
-    });
-
-    let currentRotation = 0;
-    let currentSpeed = 0;
-
-    const animateRing = () => {
-      rafRef.current = requestAnimationFrame(animateRing);
-      currentRotation += (rotationRef.current.value - currentRotation) * 0.08;
-      currentSpeed += (speedRef.current.value - currentSpeed) * 0.1;
-      speedRef.current.value *= 0.95;
-
-      const absSpeed = Math.abs(currentSpeed);
-      const skewAmount = Math.min(absSpeed * 12, 10);
-      const scaleX = 1 + Math.min(absSpeed * 0.2, 0.12);
-
-      ring.style.transform = `rotateX(${currentRotation}deg)`;
-
-      const items = ring.querySelectorAll<HTMLElement>('[data-ring-item]');
-      items.forEach((item) => {
-        const blurVal = Math.min(absSpeed * 1.5, 2);
-        item.style.filter = blurVal > 0.1 ? `blur(${blurVal}px)` : 'none';
-        const inner = item.querySelector<HTMLElement>('span');
-        if (inner) {
-          inner.style.transform = `skewX(${currentSpeed > 0 ? skewAmount : -skewAmount}deg) scaleX(${scaleX})`;
-        }
-      });
-    };
-
-    animateRing();
-
+    intervalRef.current = setInterval(() => {
+      setAnimating(true);
+      setTimeout(() => {
+        setCurrent((prev) => (prev + 1) % WORDS.length);
+        setAnimating(false);
+      }, 350);
+    }, 2200);
     return () => {
-      cancelAnimationFrame(rafRef.current);
-      ctx.revert();
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, []);
-
-  const totalItems = WORDS.length * 2;
-  const angleStep = 360 / totalItems;
-  const radius = 280;
+  }, [WORDS.length]);
 
   return (
     <section
-      ref={sectionRef}
       style={{
         position: 'relative',
         width: '100%',
         overflow: 'hidden',
       }}
     >
-      {/* Main content area — left/right split, transparent so fluid shader shows through */}
       <div
         style={{
           width: '100%',
@@ -91,12 +46,7 @@ export default function PhilosophyCarousel() {
         }}
       >
         {/* Left 30% — text panel */}
-        <div
-          style={{
-            flex: '0 0 30%',
-            position: 'relative',
-          }}
-        >
+        <div style={{ flex: '0 0 30%', position: 'relative' }}>
           <div
             style={{
               position: 'sticky',
@@ -155,13 +105,8 @@ export default function PhilosophyCarousel() {
           </div>
         </div>
 
-        {/* Right 70% — rolling text ring */}
-        <div
-          style={{
-            flex: '0 0 70%',
-            position: 'relative',
-          }}
-        >
+        {/* Right 70% — word carousel */}
+        <div style={{ flex: '0 0 70%', position: 'relative' }}>
           <div
             style={{
               position: 'sticky',
@@ -169,62 +114,98 @@ export default function PhilosophyCarousel() {
               width: '100%',
               height: '100vh',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              paddingTop: '6vh',
-              perspective: '1000px',
-              perspectiveOrigin: '50% 55%',
+              gap: '40px',
             }}
           >
+            {/* Main word display */}
             <div
-              ref={ringRef}
               style={{
-                position: 'relative',
+                height: '110px',
                 width: '100%',
-                height: `${radius * 2}px`,
-                transformStyle: 'preserve-3d',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
               }}
             >
-              {[...WORDS, ...WORDS].map((word, i) => {
-                const angle = i * angleStep;
-                return (
-                  <div
-                    key={`${word}-${i}`}
-                    data-ring-item
-                    style={{
-                      position: 'absolute',
-                      width: '100%',
-                      textAlign: 'center',
-                      left: 0,
-                      top: '50%',
-                      transform: `rotateX(${angle}deg) translateZ(${radius}px) translateY(-50%)`,
-                      backfaceVisibility: 'hidden',
-                      willChange: 'filter',
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        fontFamily: "'Noto Serif SC', Georgia, serif",
-                        fontSize: 'clamp(42px, 8vw, 100px)',
-                        fontWeight: 300,
-                        color: '#ffffff',
-                        letterSpacing: '0.06em',
-                        lineHeight: 1.1,
-                        willChange: 'transform',
-                        textShadow: '0 2px 30px rgba(0,0,0,0.55)',
-                      }}
-                    >
-                      {word}
-                    </span>
-                  </div>
-                );
-              })}
+              <span
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontSize: 'clamp(36px, 5vw, 68px)',
+                  fontWeight: 300,
+                  color: '#ffffff',
+                  letterSpacing: '0.12em',
+                  textShadow: '0 2px 30px rgba(0,0,0,0.55)',
+                  transition: 'opacity 0.35s ease, transform 0.35s ease',
+                  opacity: animating ? 0 : 1,
+                  transform: animating ? 'translateY(16px)' : 'translateY(0)',
+                  display: 'inline-block',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {WORDS[current]}
+              </span>
+            </div>
+
+            {/* Dot indicators */}
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              {WORDS.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => goTo(idx)}
+                  style={{
+                    width: idx === current ? '28px' : '8px',
+                    height: '8px',
+                    borderRadius: '4px',
+                    background: idx === current ? '#30B0D0' : 'rgba(255,255,255,0.3)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'all 0.3s ease',
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* All words as small pills */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '10px',
+                justifyContent: 'center',
+                maxWidth: '480px',
+                padding: '0 2vw',
+              }}
+            >
+              {WORDS.map((word, idx) => (
+                <button
+                  key={word}
+                  onClick={() => goTo(idx)}
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '11px',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: idx === current ? '#30B0D0' : 'rgba(255,255,255,0.45)',
+                    background: idx === current ? 'rgba(48,176,208,0.12)' : 'transparent',
+                    border: `1px solid ${idx === current ? 'rgba(48,176,208,0.5)' : 'rgba(255,255,255,0.15)'}`,
+                    borderRadius: '20px',
+                    padding: '6px 16px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {word}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
-
     </section>
   );
 }

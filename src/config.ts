@@ -104,7 +104,7 @@ export const navigationConfig: NavigationConfig = {
 }
 
 export const heroConfig: HeroConfig = {
-  wordmarkText: "ELITECARE",
+  wordmarkText: "ELITE CARE\nAND SUPPORT",
   eyebrow: "COMPASSIONATE CARE AGENCY",
   titleLine1: "Care With",
   titleLine2: "Dignity",
