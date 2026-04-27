@@ -1,6 +1,15 @@
+import { useEffect, useState } from 'react';
 import { footerConfig } from '../config';
 
 export default function Footer() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   if (!footerConfig.visionText && !footerConfig.brandName && footerConfig.columns.length === 0) {
     return null;
   }
@@ -49,7 +58,7 @@ export default function Footer() {
         }}
       >
         {footerConfig.visionText && (
-          <div style={{ maxWidth: '720px', marginBottom: '120px' }}>
+          <div style={{ maxWidth: '720px', marginBottom: isMobile ? '60px' : '120px' }}>
             <p
               className="font-serif-display"
               style={{
@@ -136,14 +145,16 @@ export default function Footer() {
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'flex-start' : 'center',
             justifyContent: 'space-between',
+            gap: isMobile ? '24px' : 0,
             paddingTop: '32px',
           }}
         >
           {footerConfig.brandName && (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-              <img src="elitelogo.png" alt="Elite Care and Support LTD" style={{ height: '80px', width: 'auto', opacity: 0.85 }} />
+              <img src="elitelogo.png" alt="Elite Care and Support LTD" style={{ height: isMobile ? '56px' : '80px', width: 'auto', opacity: 0.85 }} />
               <p
                 className="font-serif-display"
                 style={{

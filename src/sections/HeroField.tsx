@@ -1,7 +1,15 @@
+import { useEffect, useState } from 'react';
 import { heroConfig } from '../config';
 
 export default function HeroField() {
   const textShadow = '0 2px 24px rgba(0,0,0,0.45)';
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   if (!heroConfig.wordmarkText && !heroConfig.titleLine1) {
     return null;
@@ -22,17 +30,17 @@ export default function HeroField() {
           flex: '1 1 auto',
           position: 'relative',
           display: 'grid',
-          gridTemplateColumns: '1.4fr 1fr',
+          gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr',
           alignItems: 'center',
-          padding: '0 6vw',
-          gap: '6vw',
+          padding: isMobile ? '80px 6vw 40px' : '0 6vw',
+          gap: isMobile ? '32px' : '6vw',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <h2
             className="font-serif-display"
             style={{
-              fontSize: 'clamp(32px, 5vw, 80px)',
+              fontSize: isMobile ? 'clamp(28px, 8vw, 48px)' : 'clamp(32px, 5vw, 80px)',
               fontWeight: 300,
               color: '#ffffff',
               letterSpacing: '0.1em',
@@ -66,7 +74,7 @@ export default function HeroField() {
                 color: 'rgba(255,255,255,0.75)',
                 textTransform: 'uppercase',
                 marginBottom: '28px',
-                marginLeft: '60px',
+                marginLeft: isMobile ? 0 : '60px',
                 textShadow,
               }}
             >
@@ -83,7 +91,7 @@ export default function HeroField() {
               color: '#ffffff',
               wordBreak: 'keep-all',
               marginBottom: '24px',
-              marginLeft: '60px',
+              marginLeft: isMobile ? 0 : '60px',
               textShadow,
             }}
           >
@@ -105,7 +113,7 @@ export default function HeroField() {
                 color: 'rgba(255,255,255,0.75)',
                 fontWeight: 300,
                 marginBottom: '40px',
-                marginLeft: '60px',
+                marginLeft: isMobile ? 0 : '60px',
                 textShadow,
               }}
             >
@@ -141,7 +149,7 @@ export default function HeroField() {
                 transition: 'all 0.3s ease',
                 backdropFilter: 'blur(6px)',
                 WebkitBackdropFilter: 'blur(6px)',
-                marginLeft: '60px',
+                marginLeft: isMobile ? 0 : '60px',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'rgba(255,255,255,0.18)';

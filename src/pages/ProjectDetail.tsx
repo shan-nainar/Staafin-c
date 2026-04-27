@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { ProjectData } from '../config';
 import { projectDetailConfig } from '../config';
 
@@ -8,6 +9,13 @@ interface Props {
 
 export default function ProjectDetail({ project, onBack }: Props) {
   const textShadow = '0 2px 24px rgba(0,0,0,0.45)';
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   return (
     <div
@@ -25,7 +33,7 @@ export default function ProjectDetail({ project, onBack }: Props) {
           position: 'sticky',
           top: 0,
           zIndex: 20,
-          padding: '28px 4vw',
+          padding: isMobile ? '16px 4vw' : '28px 4vw',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -70,7 +78,7 @@ export default function ProjectDetail({ project, onBack }: Props) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '1.2fr 1fr',
+          gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1fr',
           gap: '6vw',
           padding: '6vh 5vw 12vh',
           alignItems: 'start',
@@ -192,8 +200,8 @@ export default function ProjectDetail({ project, onBack }: Props) {
         {/* Right — image, sticky so it stays in view while article scrolls */}
         <div
           style={{
-            position: 'sticky',
-            top: 120,
+            position: isMobile ? 'relative' : 'sticky',
+            top: isMobile ? 'auto' : 120,
             width: '100%',
             maxWidth: 420,
             justifySelf: 'center',

@@ -175,8 +175,15 @@ function GooeyTextRow({ item, filterId, onHover, onLeaveHover }: { item: MediumI
 
 export default function MediumsGlossary() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const mediums = mediumsConfig.items;
   const hovered = hoveredIndex !== null ? mediums[hoveredIndex] : null;
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   if (mediums.length === 0) {
     return null;
@@ -192,12 +199,13 @@ export default function MediumsGlossary() {
         background: '#050A0F',
         zIndex: 4,
         display: 'flex',
-        padding: '16vh 8vw',
+        flexDirection: isMobile ? 'column' : 'row',
+        padding: isMobile ? '10vh 6vw' : '16vh 8vw',
         gap: '8vw',
       }}
     >
       {/* Left — titles */}
-      <div style={{ flex: '0 0 50%' }}>
+      <div style={{ flex: isMobile ? '1 1 auto' : '0 0 50%' }}>
         <p
           className="font-sans-body"
           style={{

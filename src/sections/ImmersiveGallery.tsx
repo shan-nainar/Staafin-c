@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { galleryConfig } from '../config';
 
 interface Props {
@@ -7,6 +8,13 @@ interface Props {
 export default function ImmersiveGallery({ onSelect }: Props) {
   const textShadow = '0 2px 24px rgba(0,0,0,0.45)';
   const PROJECTS = galleryConfig.projects;
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   if (PROJECTS.length === 0 && !galleryConfig.title) {
     return null;
@@ -58,7 +66,7 @@ export default function ImmersiveGallery({ onSelect }: Props) {
         </h2>
       </div>
 
-      {/* Projects — asymmetric alternating layout */}
+      {/* Projects */}
       <div
         style={{
           position: 'relative',
@@ -70,18 +78,28 @@ export default function ImmersiveGallery({ onSelect }: Props) {
           return (
             <div
               key={project.id}
-              style={{
-                display: 'flex',
-                justifyContent: isLeft ? 'flex-start' : 'flex-end',
-                marginTop: i === 0 ? 0 : i === 1 ? '-55vh' : i === 2 ? '-20vh' : '-45vh',
-                marginBottom: 0,
-                paddingLeft: isLeft ? '5vw' : '40vw',
-                paddingRight: isLeft ? '40vw' : '5vw',
-              }}
+              style={
+                isMobile
+                  ? {
+                      display: 'flex',
+                      justifyContent: 'center',
+                      marginTop: i === 0 ? 0 : '40px',
+                      paddingLeft: '5vw',
+                      paddingRight: '5vw',
+                    }
+                  : {
+                      display: 'flex',
+                      justifyContent: isLeft ? 'flex-start' : 'flex-end',
+                      marginTop: i === 0 ? 0 : i === 1 ? '-55vh' : i === 2 ? '-20vh' : '-45vh',
+                      marginBottom: 0,
+                      paddingLeft: isLeft ? '5vw' : '40vw',
+                      paddingRight: isLeft ? '40vw' : '5vw',
+                    }
+              }
             >
               <div
                 style={{
-                  width: '45vw',
+                  width: isMobile ? '85vw' : '45vw',
                   maxWidth: 600,
                 }}
               >

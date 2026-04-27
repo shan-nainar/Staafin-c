@@ -5,7 +5,14 @@ export default function PhilosophyCarousel() {
   const WORDS = philosophyConfig.rollingWords;
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const goTo = (idx: number) => {
     if (animating) return;
@@ -43,20 +50,27 @@ export default function PhilosophyCarousel() {
           minHeight: '100vh',
           background: 'transparent',
           display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
         }}
       >
-        {/* Left 30% — text panel */}
-        <div style={{ flex: '0 0 30%', position: 'relative' }}>
+        {/* Text panel */}
+        <div style={{ flex: isMobile ? '1 1 auto' : '0 0 30%', position: 'relative' }}>
           <div
-            style={{
-              position: 'sticky',
-              top: 0,
-              height: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              padding: '0 5vw 0 4vw',
-            }}
+            style={
+              isMobile
+                ? {
+                    padding: '80px 6vw 40px',
+                  }
+                : {
+                    position: 'sticky',
+                    top: 0,
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '0 5vw 0 4vw',
+                  }
+            }
           >
             {philosophyConfig.eyebrow && (
               <p
@@ -105,20 +119,31 @@ export default function PhilosophyCarousel() {
           </div>
         </div>
 
-        {/* Right 70% — word carousel */}
-        <div style={{ flex: '0 0 70%', position: 'relative' }}>
+        {/* Word carousel */}
+        <div style={{ flex: isMobile ? '1 1 auto' : '0 0 70%', position: 'relative' }}>
           <div
-            style={{
-              position: 'sticky',
-              top: 0,
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '40px',
-            }}
+            style={
+              isMobile
+                ? {
+                    width: '100%',
+                    padding: '0 6vw 80px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '40px',
+                  }
+                : {
+                    position: 'sticky',
+                    top: 0,
+                    width: '100%',
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '40px',
+                  }
+            }
           >
             {/* Main word display */}
             <div
